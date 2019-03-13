@@ -22,32 +22,65 @@ void affiche_graphe(graphe G){
 }
 
 int degre(graphe G, int i){
-	return 0;
+	
+	int deg = 0; 
+	for(int j = 0; j<G.nombre_sommet; j++)
+	{
+		deg += G.matrice_adjacence[i][j];
+	}
+	return deg;
 }
 
 
 graphe init_graphe(int n){//créé un graphe dont tous les sommets sont isolés
-	graphe G; 
+	graphe G;
+	G.nombre_sommet = n;
+	G.matrice_adjacence = (int**)malloc(sizeof(int*)*n);
+	for(int j = 0; j<n; j++)
+	{
+		G.matrice_adjacence[j] = calloc(n, sizeof(int));
+	}
+	
 	return G;
 }
 
 void libere_graphe(graphe G){
+	for(int j = 0; j<G.nombre_sommet; j++)
+	{
+		free(G.matrice_adjacence[j]);
+	}
+	free(G.matrice_adjacence);
 }
 
 graphe cycle_graphe(int n){//créé un cycle
-	graphe G;
+	graphe G = init_graphe(n);
+	
+	G.matrice_adjacence[0][n-1] = 1;
+	G.matrice_adjacence[n-1][0] = 1;
+	for(int i = 1; i<n; i++)
+	{
+		G.matrice_adjacence[i][i-1] = 1;
+		G.matrice_adjacence[i-1][i] = 1;
+	}
 	return G;
 }
 
-
 graphe complet_graphe(int n){//créé un graphe complet
-	graphe G;
+	graphe G = init_graphe(n);
+	
+	for(int j = 0; j<n; j++)
+	{
+		for(int i = 0; i<n; i++)
+		{	
+			G.matrice_adjacence[j][i] = 1;
+		}
+	}
 	return G;
 }
 
 
 graphe alea_graphe(int n, float p){
-	graphe G;
+	graphe G = init_graphe(n);
 	return G;
 }
 
