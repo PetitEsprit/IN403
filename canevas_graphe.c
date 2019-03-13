@@ -81,6 +81,19 @@ graphe complet_graphe(int n){//créé un graphe complet
 
 graphe alea_graphe(int n, float p){
 	graphe G = init_graphe(n);
+	int pp = p * 10;
+	
+	for(int j = 0; j<n; j++)
+	{
+		for(int i = 0; i<n; i++)
+		{
+			if(rand()% 11 <= pp)
+			{
+				G.matrice_adjacence[j][i] = 1;
+			}
+		}
+		
+	}
 	return G;
 }
 
@@ -90,17 +103,27 @@ graphe graphe_arbre(int *pere, int n){//créer un arbre couvrant à partir du ta
 }
 
 void parcours_sommet(graphe G, int s, int *couleur, int *pere){
+	couleur[s] = 1;
+	for(int j=0; j < G.nombre_sommet; j++)
+	{
+		if(G.matrice_adjacence[s][j] && couleur[j] == 0)
+			parcours_sommet(G, j, couleur, pere);
+	}
 }
 
-void parcours_graphe(graphe G){
+graphe parcours_graphe(graphe G){
 	int *couleur = calloc(G.nombre_sommet,sizeof(int)); // 0 est blanc, 1 gris et 2 noir
 	int *pere = malloc(sizeof(int)*G.nombre_sommet);
+	for(int i=0; i<G.nombre_sommet; i++)
+	{
+		if(couleur[i] == 0)
+			parcours_sommet(G,i,couleur,pere);
+	}
 	free(couleur);
 	free(pere);
+	return G;
 }
-
-
-  
+ 
 void cycle_eulerien(graphe G){//on suppose le graphe connexe
 }
 
@@ -108,18 +131,18 @@ void cycle_eulerien(graphe G){//on suppose le graphe connexe
 int main(){
 	/* Tests pour vérifier si vos implémentations sont correctes*/
 	srand(time(NULL));
-  	graphe G = cycle_graphe(10);
+  	/*graphe G = cycle_graphe(10);
   	affiche_graphe(G);
 	graphe H = complet_graphe(5);
-	affiche_graphe(H);
+	affiche_graphe(H);*/
 	graphe L = alea_graphe(10,0.2);
 	affiche_graphe(L);
 	graphe A = parcours_graphe(L);
-	affiche_graphe(A);
+	/*affiche_graphe(A);
 	cycle_eulerien(L);
 	cycle_eulerien(H);
 	libere_graphe(G);
-	libere_graphe(H);
+	libere_graphe(H);*/
 	libere_graphe(L);
-	libere_graphe(A);
+	//libere_graphe(A);
 }
